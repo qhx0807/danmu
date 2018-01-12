@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>微信上墙</title>
+  <link rel="stylesheet" href="../css/common.css">
+</head>
+<body>
+  <div id="app">
+
+  </div>
+  <script src="http://lib.baomitu.com/socket.io/1.7.4/socket.io.js"></script>
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    var app = new Vue({
+      el:'#app',
+      data: {
+        danmuData: [
+          { msgType: 'text', content: 'Hello World!' }
+        ],
+      },
+      created() {
+
+      },
+      watch: {
+
+      },
+      methods: {
+
+      }
+    })
+  </script>
+</body>
+</html>

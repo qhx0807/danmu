@@ -1,0 +1,57 @@
+.danmu-video {
+  position: fixed;
+  -o-object-fit: fill;
+  object-fit: fill;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+}
+.danmu-warp{
+  position: absolute;
+  top: 100px;
+  bottom: 100px;
+  color: #fff;
+  width: 100%;
+}
+@keyframes move{
+  /* from {transform:translate(900px, 0px)} */
+  to {transform:translate(-100%, 0px)}
+}
+
+.danmu-item{
+  display: inline-block;
+  padding: 10px 40px 10px 140px;
+  background: rgba(0,0,0,0.5);
+  box-shadow: 0 0 5px rgba(218,229,253,0.75);
+  border-radius: 6px;
+  zoom: 1;
+  transform:translate(100vw, 0px);
+  position: absolute; visibility: visible; opacity: 1;
+  animation: move 5s linear;
+  animation-fill-mode:forwards;
+  top: 0px;
+}
+
+.danmu-item .box{
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  border-radius: 80px;
+  box-shadow: 0 0 18px rgba(158,249,250,.8);
+  float: left;
+  margin-left: -120px;
+}
+
+.danmu-item .box img{
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.danmu-item .con{
+  line-height: 80px;
+  font-size: 22px;
+  white-space: nowrap;
+}

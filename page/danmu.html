@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>大屏幕弹幕</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/danmu.css">
+</head>
+
+<body>
+  <div id="app">
+    <!-- <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video> -->
+    <div class="danmu-warp">
+      <div class="danmu-item" id="demo">
+        <div class="box"><img src="" alt=""></div>
+        <div class="con">qhx0807 : Hello World! </div>
+      </div>
+    </div>
+    <button @click="run">run</button>
+  </div>
+  <script src="http://lib.baomitu.com/socket.io/1.7.4/socket.io.js"></script>
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    var app = new Vue({
+      el:'#app',
+      data:{
+        danmuData:[
+          {headImg:'', name:'qhx0807', msgType:'text', content:'Hello World!'}
+        ],
+        url:'2222'
+      },
+      created () {
+
+      },
+      mounted () {
+        this.$nextTick(() => {
+
+        })
+      },
+      watch: {
+
+      },
+      methods: {
+        run (item) {
+
+          var htmlStr = `<div class="danmu-item">
+                          <div class="box"><img src=""></div>
+                          <div class="con">qhx0807 : Hello World! </div>
+                        </div>`
+          $(".danmu-warp").append(htmlStr)
+
+          $('.danmu-item').on('animationend',function(){
+            $(this).remove()
+          })
+        }
+      }
+    })
+  </script>
+</body>
+</html>
