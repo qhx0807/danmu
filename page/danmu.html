@@ -14,9 +14,11 @@
   <div id="app">
     <!-- <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video> -->
     <div class="danmu-warp">
-      <div class="danmu-item" id="demo">
-        <div class="box"><img src="" alt=""></div>
-        <div class="con">qhx0807 : Hello World! </div>
+      <div class="row1">
+        <div class="danmu-item" id="demo">
+          <div class="box"><img src="" alt=""></div>
+          <div class="con">qhx0807 : Hello World! </div>
+        </div>
       </div>
     </div>
     <button @click="run">run</button>
@@ -51,7 +53,7 @@
                           <div class="box"><img src=""></div>
                           <div class="con">qhx0807 : Hello World! </div>
                         </div>`
-          $(".danmu-warp").append(htmlStr)
+          $(".row1").append(htmlStr)
 
           $('.danmu-item').on('animationend',function(){
             $(this).remove()
@@ -62,3 +64,10 @@
   </script>
 </body>
 </html>
+<!--
+  延时时间：delay
+  运行时间：duration
+  总长度：弹幕宽度+屏幕宽
+  速度：speed=length/duration
+  完全出现时间：w1/speed
+-->
