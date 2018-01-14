@@ -14,26 +14,33 @@
   bottom: 100px;
   color: #fff;
   width: 100%;
+  overflow: hidden;
 }
 @keyframes move{
-  /* from {transform:translate(900px, 0px)} */
+  from {transform:translate(100vw, 0px)}
   to {transform:translate(-100%, 0px)}
 }
 
 .danmu-item{
-  display: inline-block;
+  display: none;
   padding: 10px 40px 10px 140px;
   background: rgba(0,0,0,0.5);
   box-shadow: 0 0 5px rgba(218,229,253,0.75);
   border-radius: 6px;
   zoom: 1;
   transform:translate(100vw, 0px);
-  position: absolute; visibility: visible; opacity: 1;
-  animation: move 5s linear;
+  position: absolute;
+  visibility: visible;
+  animation: move 28s linear;
   animation-fill-mode:forwards;
   top: 0px;
 }
-
+.danmu-item.row1{
+  top: 0;
+}
+.danmu-item.row2{
+  top: 145px;
+}
 .danmu-item .box{
   display: inline-block;
   width: 80px;

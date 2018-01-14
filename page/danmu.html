@@ -11,17 +11,33 @@
 </head>
 
 <body>
+  <style>
+    .danmu-item.row2{
+      top: 392.421px;
+      animation-delay: 4s;
+      animation-duration: 16s;
+      display: inline-block;
+    }
+    .run-btn{
+      position: absolute;
+      z-index: 999;
+      height: 34px;
+      line-height: 34px;
+      width: 100px;
+      text-align: center;
+      top: 0;
+      left: 0;
+    }
+  </style>
   <div id="app">
-    <!-- <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video> -->
+    <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video>
     <div class="danmu-warp">
-      <div class="row1">
-        <div class="danmu-item" id="demo">
-          <div class="box"><img src="" alt=""></div>
-          <div class="con">qhx0807 : Hello World! </div>
-        </div>
+      <div class="danmu-item" id="demo">
+        <div class="box"><img src="../assets/bg.jpg" alt=""></div>
+        <div class="con">qhx0807 : Hello World! </div>
       </div>
     </div>
-    <button @click="run">run</button>
+    <button class="run-btn" @click="run">run</button>
   </div>
   <script src="http://lib.baomitu.com/socket.io/1.7.4/socket.io.js"></script>
   <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -31,9 +47,11 @@
       el:'#app',
       data:{
         danmuData:[
-          {headImg:'', name:'qhx0807', msgType:'text', content:'Hello World!'}
+          {headImg:'', name:'qhx0807', msgType:'text', content:'Hello World!', row: 0}
         ],
-        url:'2222'
+        url:'2222',
+        lastRow: 0,
+
       },
       created () {
 
@@ -49,15 +67,16 @@
       methods: {
         run (item) {
 
-          var htmlStr = `<div class="danmu-item">
-                          <div class="box"><img src=""></div>
+          var htmlStr = `<div class="danmu-item row2">
+                          <div class="box"><img src="../assets/bg.jpg"></div>
                           <div class="con">qhx0807 : Hello World! </div>
                         </div>`
-          $(".row1").append(htmlStr)
+          $(".danmu-warp").append(htmlStr)
 
           $('.danmu-item').on('animationend',function(){
             $(this).remove()
           })
+
         }
       }
     })
