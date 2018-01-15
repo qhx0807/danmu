@@ -70,13 +70,14 @@
           console.log(this.getRowStatus())
         },
         run (item) {
-          var htmlStr = `<div class="danmu-item">
+          var result = this.getRowStatus()
+          var htmlStr = `<div class="danmu-item" style="animation-delay:${result.delay}s">
                           <div class="box"><img src="../assets/bg.jpg"></div>
                           <div class="con">qhx0807 : Hello World! </div>
                         </div>`
 
-          var result = this.getRowStatus()
-          $("#row"+result.row).append(htmlStr)
+
+          $("#"+result.row).append(htmlStr)
 
           $('.danmu-item').on('animationend',function(){
             $(this).remove()
@@ -99,7 +100,7 @@
               rowArr[i].num = $("#"+rowArr[i].name).find(".danmu-item").length
             }else{
               console.log(i)
-              return {row: i, delay: 0}
+              return {row: 'row'+i, delay: 0}
               break
             }
           }
@@ -107,14 +108,14 @@
             return a.num - b.num
           })
           var el = $("#"+rowArr[0].name).find(".danmu-item:last")[0]
-          var w = window.getComputedStyle(el, null).width
+          var w = parseFloat(window.getComputedStyle(el, null).width)
           var d = parseFloat(w / speed)
-
+          console.log(w)
           console.log(rowArr[0])
 
           return {
             row: rowArr[0].name,
-            dely: rowArr[0].delay + 2 + d
+            delay: rowArr[0].delay + d
           }
 
         },
