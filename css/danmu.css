@@ -16,6 +16,25 @@
   width: 100%;
   overflow: hidden;
 }
+.danmu-warp .row{
+  position: absolute;
+  width: 100%;
+  height: 105px;
+}
+
+.danmu-warp .row0{
+  top: 20px;
+}
+.danmu-warp .row1{
+  top: 145px;
+}
+.danmu-warp .row2{
+  top: 270px;
+}
+.danmu-warp .row3{
+  top: 395px;
+}
+
 @keyframes move{
   from {transform:translate(100vw, 0px)}
   to {transform:translate(-100%, 0px)}
@@ -35,12 +54,7 @@
   animation-fill-mode:forwards;
   top: 0px;
 }
-.danmu-item.row1{
-  top: 0;
-}
-.danmu-item.row2{
-  top: 145px;
-}
+
 .danmu-item .box{
   display: inline-block;
   width: 80px;
