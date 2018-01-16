@@ -27,7 +27,7 @@
     }
   </style>
   <div id="app">
-    <!-- <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video> -->
+    <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video>
     <div class="danmu-warp">
       <div class="row row0" id="row0"></div>
       <div class="row row1" id="row1"></div>
@@ -56,7 +56,7 @@
         socket: null,
       },
       created () {
-        // alert(Math.random() * 4 >> 0)
+        //  alert(Math.random().toString(35).substr(2).repeat((Math.random() * 4 >> 0)+1))
       },
       mounted () {
         // var socket = io('http://qhxing.site')
@@ -78,10 +78,11 @@
           console.log(this.getRowStatus())
         },
         run (item) {
+          var str= Math.random().toString(35).substr(2).repeat((Math.random() * 4 >> 0)+1)
           var result = this.getRowStatus()
           var htmlStr = `<div class="danmu-item" style="animation-delay:${result.delay}s">
                           <div class="box"><img src="../assets/bg.jpg"></div>
-                          <div class="con">qhx0807 : Hello World! </div>
+                          <div class="con">qhx0807 : ${str} </div>
                         </div>`
 
 

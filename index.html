@@ -1,39 +1,211 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Socket.IO chat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
-  </head>
-  <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-    <script src="http://lib.baomitu.com/socket.io/1.7.4/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-        $(function () {
-            var socket = io('http://qhxing.site')
-            $('form').submit(function(){
-                socket.emit('message', $('#m').val());
-                $('#m').val('');
-                return false;
-            });
 
-            socket.on('message', function(msg){
-              $("#messages").append('<li>'+JSON.stringify(msg)+'</li>')
-              console.log(msg)
-            });
-        });
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login</title>
+  <link rel="stylesheet" href="./css/common.css">
+  <link rel="stylesheet" href="./css/login.css">
+</head>
+
+<body>
+  <style>
+    html,body,#app{
+      height: 100%;
+      width: 100%;
+    }
+    #canvas{
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      z-index: -1;
+      background-color: #f8f8f8;
+    }
+    .slide-fade-enter-active {
+      transition: all .3s ease;
+    }
+    .slide-fade-leave-active {
+      transition: all .4s linear;
+    }
+    .slide-fade-enter, .slide-fade-leave-to{
+      transform: translateX(-50px);
+      opacity: 0;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity 2s;
+    }
+    .fade-enter, .fade-leave-to {
+      opacity: 0;
+    }
+  </style>
+  <div id="app">
+    <canvas id="canvas"></canvas>
+    <transition name="slide-fade">
+      <div class="login-wrap" key="login" v-if="loginShow">
+        <h3>WELCOME</h3>
+        <div class="form-wrap">
+            <input type="text" v-model="name">
+        </div>
+        <div class="form-wrap">
+            <input type="password" v-model="psd">
+        </div>
+        <div class="form-wrap">
+            <button @click="login">Login</button>
+        </div>
+      </div>
+    </transition>
+    <transition name="fade">
+        <div v-if="!loginShow" class="menu-wrap" key="menu">
+          <ul>
+            <li>节目信息</li>
+            <li>弹幕数据</li>
+            <li>实时弹幕</li>
+            <li>投票</li>
+          </ul>
+        </div>
+    </transition>
+
+  </div>
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        loginShow: true,
+        name:'',
+        psd:'',
+      },
+      mounted() {
+        this.bgCanvas()
+      },
+      methods: {
+        bgCanvas() {
+          class Circle {
+            //创建对象
+            //以一个圆为对象
+            //设置随机的 x，y坐标，r半径，_mx，_my移动的距离
+            //this.r是创建圆的半径，参数越大半径越大
+            //this._mx,this._my是移动的距离，参数越大移动
+            constructor(x, y) {
+              this.x = x;
+              this.y = y;
+              this.r = Math.random() * 11;
+              this._mx = Math.random();
+              this._my = Math.random();
+            }
+            //canvas 画圆和画直线
+            //画圆就是正常的用canvas画一个圆
+            //画直线是两个圆连线，为了避免直线过多，给圆圈距离设置了一个值，距离很远的圆圈，就不做连线处理
+            drawCircle(ctx) {
+              ctx.beginPath();
+              //arc() 方法使用一个中心点和半径，为一个画布的当前子路径添加一条弧。
+              ctx.arc(this.x, this.y, this.r, 0, 360)
+              ctx.closePath();
+              ctx.fillStyle = 'rgba(204, 204, 204, 0.3)';
+              ctx.fill();
+            }
+
+            drawLine(ctx, _circle) {
+              let dx = this.x - _circle.x;
+              let dy = this.y - _circle.y;
+              let d = Math.sqrt(dx * dx + dy * dy)
+              if (d < 210) {
+                ctx.beginPath();
+                //开始一条路径，移动到位置 this.x,this.y。创建到达位置 _circle.x,_circle.y 的一条线：
+                ctx.moveTo(this.x, this.y);   //起始点
+                ctx.lineTo(_circle.x, _circle.y);   //终点
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(204, 204, 204, 0.3)';
+                ctx.stroke();
+              }
+            }
+
+            // 圆圈移动
+            // 圆圈移动的距离必须在屏幕范围内
+            move(w, h) {
+              this._mx = (this.x < w && this.x > 0) ? this._mx : (-this._mx);
+              this._my = (this.y < h && this.y > 0) ? this._my : (-this._my);
+              this.x += this._mx / 2;
+              this.y += this._my / 2;
+            }
+          }
+          //鼠标点画圆闪烁变动
+          class currentCirle extends Circle {
+            constructor(x, y) {
+              super(x, y)
+            }
+            drawCircle(ctx) {
+              ctx.beginPath();
+              //注释内容为鼠标焦点的地方圆圈半径变化
+              //this.r = (this.r < 14 && this.r > 1) ? this.r + (Math.random() * 2 - 1) : 2;
+              this.r = 8;
+              ctx.arc(this.x, this.y, this.r, 0, 360);
+              ctx.closePath();
+              //ctx.fillStyle = 'rgba(0,0,0,' + (parseInt(Math.random() * 100) / 100) + ')'
+              ctx.fillStyle = 'rgba(204, 204, 204, 0.3)'
+              ctx.fill();
+            }
+          }
+          //更新页面用requestAnimationFrame替代setTimeout
+          window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+          let canvas = document.getElementById("canvas");
+          let ctx = canvas.getContext("2d");
+          let w = canvas.width = canvas.offsetWidth;
+          let h = canvas.height = canvas.offsetHeight;
+          let circles = [];
+          let current_circle = new currentCirle(0, 0)
+          let draw = function () {
+            ctx.clearRect(0, 0, w, h);
+            for (let i = 0; i < circles.length; i++) {
+              circles[i].move(w, h);
+              circles[i].drawCircle(ctx);
+              for (let j = i + 1; j < circles.length; j++) {
+                circles[i].drawLine(ctx, circles[j])
+              }
+            }
+            if (current_circle.x) {
+              current_circle.drawCircle(ctx);
+              for (var k = 1; k < circles.length; k++) {
+                current_circle.drawLine(ctx, circles[k])
+              }
+            }
+            requestAnimationFrame(draw)
+          }
+          let init = function (num) {
+            for (var i = 0; i < num; i++) {
+              circles.push(new Circle(Math.random() * w, Math.random() * h));
+            }
+            draw();
+          }
+          window.addEventListener('load', init(77));
+          window.onmousemove = function (e) {
+            e = e || window.event;
+            current_circle.x = e.clientX;
+            current_circle.y = e.clientY;
+          }
+          window.onmouseout = function () {
+            current_circle.x = null;
+            current_circle.y = null;
+          };
+
+        },
+        login() {
+          if(!this.name || !this.psd){
+            return false
+          }
+          this.loginShow = false
+        }
+      }
+    })
+  </script>
+</body>
+
 </html>
