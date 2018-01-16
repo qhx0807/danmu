@@ -14,7 +14,7 @@
   <style>
     .danmu-item{
       animation-delay: 1s;
-      animation-duration: 27s;
+      animation-duration: 30s;
       display: inline-block;
     }
     .run-btn{
@@ -53,14 +53,22 @@
         lastRow: 0,
         finishArr: [],
         readyArr: [],
+        socket: null,
       },
       created () {
         // alert(Math.random() * 4 >> 0)
       },
       mounted () {
-        this.$nextTick(() => {
-
-        })
+        // var socket = io('http://qhxing.site')
+        // this.socket = socket
+        // socket.on('connect', function(){
+        //   console.log("socket connect success")
+        // })
+        // this.$nextTick(() => {
+        //   socket.on('message', function (obj) {
+        //     console.log(obj)
+        //   })
+        // })
       },
       watch: {
 
@@ -85,17 +93,17 @@
         },
         getRowStatus(){
           var rowArr = [
-            {name:'row0', num: 0, delay: 0, right: 0 },
-            {name:'row1', num: 0, delay: 0, right: 0 },
-            {name:'row2', num: 0, delay: 0, right: 0 },
-            {name:'row3', num: 0, delay: 0, right: 0 }
+            {name:'row0', num: 0, delay: 0, left: 0 },
+            {name:'row1', num: 0, delay: 0, left: 0 },
+            {name:'row2', num: 0, delay: 0, left: 0 },
+            {name:'row3', num: 0, delay: 0, left: 0 }
           ]
-          let winW = $(window).width()
-          var speed = winW / 28
+          var winW = $(window).width()
+          var speed = parseFloat(winW / 30)
           for (let i = 0; i < rowArr.length; i++) {
             let dom = $("#"+rowArr[i].name).find(".danmu-item:last")
             if(dom.length>0){
-              rowArr[i].right = parseFloat(winW - dom.width() - dom.position().left)
+              rowArr[i].left = parseFloat(dom.position().left)
               rowArr[i].delay = parseFloat(window.getComputedStyle(dom[0], null).animationDelay)
               rowArr[i].num = $("#"+rowArr[i].name).find(".danmu-item").length
             }else{
@@ -113,9 +121,18 @@
           console.log(w)
           console.log(rowArr[0])
 
+          var delay = 0
+          if(rowArr[0].left < winW && rowArr[0].left > winW-250){
+            delay = d
+          }else if(rowArr[0].left <= winW-250){
+            delay = 1
+          }else{
+            delay = rowArr[0].delay + d
+          }
+
           return {
             row: rowArr[0].name,
-            delay: rowArr[0].delay + d
+            delay: delay
           }
 
         },
