@@ -54,7 +54,7 @@
             <input type="text" v-model="name">
         </div>
         <div class="form-wrap">
-            <input type="password" v-model="psd">
+            <input type="password" v-model="password">
         </div>
         <div class="form-wrap">
             <button @click="login">Login</button>
@@ -81,7 +81,7 @@
       data: {
         loginShow: true,
         name:'',
-        psd:'',
+        password:'',
       },
       mounted() {
         this.bgCanvas()
@@ -198,7 +198,7 @@
 
         },
         login() {
-          if(!this.name || !this.psd){
+          if(!this.name || !this.password){
             return false
           }
           this.loginShow = false
