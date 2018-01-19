@@ -27,7 +27,7 @@
     }
   </style>
   <div id="app">
-    <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video>
+    <!-- <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video> -->
     <div class="danmu-warp">
       <div class="row row0" id="row0"></div>
       <div class="row row1" id="row1"></div>
@@ -36,7 +36,6 @@
     </div>
     <div class="run-btn">
       <button @click="test">test</button>
-      <button @click="run">run</button>
     </div>
   </div>
   <script src="http://lib.baomitu.com/socket.io/1.7.4/socket.io.js"></script>
@@ -59,35 +58,38 @@
         //  alert(Math.random().toString(35).substr(2).repeat((Math.random() * 4 >> 0)+1))
       },
       mounted () {
-        // var socket = io('http://qhxing.site')
-        // this.socket = socket
-        // socket.on('connect', function(){
-        //   console.log("socket connect success")
-        // })
-        // this.$nextTick(() => {
-        //   socket.on('message', function (obj) {
-        //     console.log(obj)
-        //   })
-        // })
+        var t = this
+        var socket = io('http://qhxing.site')
+        this.socket = socket
+        socket.on('connect', function(){
+          console.log("socket connect success")
+        })
+        this.$nextTick(() => {
+          socket.on('message', function (obj) {
+            console.log(obj)
+            t.run(obj)
+          })
+        })
       },
       watch: {
 
       },
       methods: {
         test(){
-          console.log(this.getRowStatus())
+          var obj = {
+            nickname: 'qhx0807',
+            content: Math.random().toString(35).substr(2).repeat((Math.random() * 4 >> 0)+1),
+            headimgurl: '../assets/bg1.jpg'
+          }
+          this.run(obj)
         },
         run (item) {
-          var str= Math.random().toString(35).substr(2).repeat((Math.random() * 4 >> 0)+1)
           var result = this.getRowStatus()
           var htmlStr = `<div class="danmu-item" style="animation-delay:${result.delay}s">
-                          <div class="box"><img src="../assets/bg.jpg"></div>
-                          <div class="con">qhx0807 : ${str} </div>
+                          <div class="box"><img src="${item.headimgurl}"></div>
+                          <div class="con">${item.nickname} : ${decodeURIComponent(item.content)} </div>
                         </div>`
-
-
           $("#"+result.row).append(htmlStr)
-
           $('.danmu-item').on('animationend',function(){
             $(this).remove()
           })
