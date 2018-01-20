@@ -1,0 +1,110 @@
+html,body{
+  height: 100%;
+  width:100%;
+}
+#app{
+  height: 100%;
+  width:100%;
+  background: url(../assets/bg3.jpg) center top no-repeat;
+  background-size: 100% 100%;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+  font-family: "Microsoft yahei", "SimHei";
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vote-wrap{
+  width: 910px;
+  height: 560px;
+  background: url(../assets/bg4.png) center no-repeat;
+  background-size: 100% 100%;
+  transition: all ease .6s;
+  position: relative;
+  padding: 40px 45px;
+}
+.vote-wrap h2{
+  width: 670px;
+  font-size: 26px;
+  padding-bottom: 10px;
+  font-weight: normal;
+}
+.tips {
+  color: #fff;
+  font-size: 16px;
+  padding: 0 25px;
+  margin-bottom: 20px;
+}
+.total-num{
+  position: absolute;
+  right: 35px;
+  top: 50px;
+  font-size: 18px;
+}
+.total-num strong{
+  font-weight: normal;
+  font-size: 28px;
+}
+.vote-box{
+  height: 390px;
+  padding-left: 40px;
+}
+.vote-box ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.vote-box ul li{
+  float: left;
+  width: 150px;
+  height: 390px;
+  text-align: center;
+}
+.li-head{
+  height: 75px;
+}
+.head-num{
+  width: 49px;
+  height: 58px;
+  margin: 0 auto;
+  background: url('../assets/num-green.png') center no-repeat;
+  background-size: 100% 100%;
+  position: relative;
+}
+.head-num span{
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 16px;
+  color: #ff4300;
+}
+.li-body{
+  height: 270px;
+  position: relative;
+  background: url('../assets/li-bg.png') center no-repeat;
+}
+.vote-num{
+  font-size: 14px;
+  position: absolute;
+  bottom: 20px;
+  left: 54px;
+  width: 42px;
+  transition: all ease .6s;
+}
+.li-body-bg{
+  position: absolute;
+  bottom: 0;
+  width: 42px;
+  height: 20px;
+  left: 54px;
+  background-color: #d3f750;
+  border-radius: 6px;
+  transition: all ease .6s;
+}
+.li-foot{
+  height: 45px;
+  font-size: 14px;
+  padding-top: 5px;
+}
