@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>投票</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+</head>
+
+<body>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+    #app{
+      padding: 0 15px;
+    }
+    .weui-cells__title{
+      padding: 20px 15px;
+    }
+    .btn-wrap{
+      padding-top: 30px;
+    }
+    .tips{
+      font-size: 13px;
+      color: #80848f;
+      margin-top: 15px;
+    }
+  </style>
+  <div id="app" v-cloak>
+    <div id="toast" v-if="voteSuccess">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">已投票</p>
+        </div>
+    </div>
+    <div id="loadingToast" v-if="loading">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-loading weui-icon_toast"></i>
+          <p class="weui-toast__content">加载中</p>
+      </div>
+    </div>
+    <div class="weui-cells__title">
+      <h3 v-if="!success">投票</h3>
+      <h3 v-if="success">您已经投过票啦~</h3>
+      <p>选择你支持的节目（最多三个）</p>
+    </div>
+    <div class="weui-cells weui-cells_checkbox">
+        <label class="weui-cell weui-check__label" :for="'s'+index" v-for="(item, index) in showData" :key="item._id">
+            <div class="weui-cell__hd">
+                <input type="checkbox" class="weui-check" :disabled="success" :value="item._id" :id="'s'+index"  v-model="checkedShows">
+                <i class="weui-icon-checked"></i>
+            </div>
+            <div class="weui-cell__bd">
+                <p>{{item.title}}&nbsp;<span style="font-size:14px;color:#495060">[{{item.vote}}票]</span></p>
+            </div>
+        </label>
+    </div>
+    <p class="tips">请选择不超过三个选项</p>
+    <div class="btn-wrap" v-show="!success">
+        <a href="javascript:;" @click="vote" :class="{'weui-btn_disabled' : btnStatus}" class="weui-btn weui-btn_primary">确认投票</a>
+    </div>
+
+  </div>
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        showData: [],
+        loading:true,
+        success:false,
+        checkedShows: [],
+        voteSuccess:false
+      },
+      created() {
+        this.loadShowData()
+        if(localStorage.vote==1){
+          this.success = true
+        }else{
+          this.success = false
+        }
+        if(localStorage.t){
+          this.checkedShows = localStorage.t.split(',')
+        }
+      },
+      computed: {
+        btnStatus(){
+          if(this.checkedShows.length==0 || this.checkedShows.length>3){
+            return true
+          }else{
+            return false
+          }
+        }
+      },
+      methods: {
+        loadShowData() {
+          var self = this
+          $.ajax({
+            url: 'http://106.14.198.193/programs',
+            method: 'GET',
+            timeout: 10000,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+              // console.log(data)
+              self.showData = data.data
+              self.loading = false
+
+            },
+            error: function (xhr, textStatus) {
+              self.loading = false
+            },
+          })
+        },
+        vote() {
+          console.log(this.checkedShows)
+          var self = this
+          var ids = this.checkedShows.toString()
+          // var ids = this.checkedShows[0]
+          self.loading = true
+          $.ajax({
+            url: 'http://106.14.198.193/vote',
+            method: 'POST',
+            data:{ids: ids},
+            timeout: 10000,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+              // console.log(data)
+              self.loadShowData()
+              self.success = true
+              self.voteSuccess = true
+              self.loading = false
+              if(data.status == "OK"){
+                localStorage.setItem("vote", 1)
+                localStorage.setItem("t", ids)
+              }
+              setTimeout(function(){
+                self.voteSuccess = false
+              },1000)
+            },
+            error: function (xhr, textStatus) {
+              self.loading = false
+            },
+          })
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
