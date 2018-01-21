@@ -27,7 +27,7 @@
     }
   </style>
   <div id="app">
-    <!-- <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video> -->
+    <video class="danmu-video" src="../assets/danmu_bg.mp4" autoplay="autoplay" loop="loop" ></video>
     <div class="danmu-warp">
       <div class="row row0" id="row0"></div>
       <div class="row row1" id="row1"></div>
@@ -85,6 +85,7 @@
         },
         run (item) {
           var result = this.getRowStatus()
+          var length = item.content.length+item.nickname.length
           var htmlStr = `<div class="danmu-item" style="animation-delay:${result.delay}s">
                           <div class="box"><img src="${item.headimgurl}"></div>
                           <div class="con">${item.nickname} : ${decodeURIComponent(item.content)} </div>
@@ -132,7 +133,6 @@
           }else{
             delay = rowArr[0].delay + d
           }
-
           return {
             row: rowArr[0].name,
             delay: delay
