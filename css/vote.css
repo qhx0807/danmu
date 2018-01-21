@@ -14,6 +14,9 @@ html,body{
   justify-content: center;
   align-items: center;
 }
+[v-cloak]{
+  display: none;
+}
 .vote-wrap{
   width: 910px;
   height: 560px;
@@ -98,7 +101,8 @@ html,body{
   bottom: 0;
   width: 42px;
   height: 20px;
-  left: 54px;
+  left: 50%;
+  margin-left: -21px;
   background-color: #d3f750;
   border-radius: 6px;
   transition: all ease .6s;
@@ -106,5 +110,5 @@ html,body{
 .li-foot{
   height: 45px;
   font-size: 14px;
-  padding-top: 5px;
+  padding: 5px 15px 0 15px;
 }

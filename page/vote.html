@@ -9,38 +9,27 @@
   <link rel="stylesheet" href="../css/common.css">
   <link rel="stylesheet" href="../css/vote.css">
 </head>
+
 <body>
-  <div id="app">
-    <button @click="test">test</button>
+  <div id="app" v-cloak>
     <div class="vote-wrap">
       <h2>你最喜欢以及最支持哪几个节目？</h2>
       <p class="tips">微信关注“测试公众号”，点击“投票”即可参与互动</p>
-      <span class="total-num">共<strong>2037</strong>人参与</span>
+      <!-- <span class="total-num">共<strong>2037</strong>人参与</span> -->
       <div class="vote-box">
         <ul>
-          <li>
+          <li v-for="(item, index) in showData" :key="item._id">
             <div class="li-head">
-              <div class="head-num"><span>1</span></div>
+              <div class="head-num" :style="bgStyle(index)">
+                <span>{{index+1}}</span>
+              </div>
             </div>
             <div class="li-body">
-              <p class="vote-num">123票</p>
-              <div class="li-body-bg"></div>
+              <p class="vote-num" :style="{bottom:(item.vote)*1.3+1+'px'}">{{item.vote}}票</p>
+              <div class="li-body-bg" :style="[progressColor(index), {height: item.vote*1.3+1+'px'}]" ></div>
             </div>
-            <div class="li-foot">新年晚会</div>
+            <div class="li-foot">{{item.title}}</div>
           </li>
-          <li>
-            <div class="li-head">
-              <div class="head-num" style="background-image:url(../assets/num-purple.png)"><span>2</span></div>
-            </div>
-            <div class="li-body">
-              <p class="vote-num" :style="{bottom:num+'px'}">123票</p>
-              <div class="li-body-bg" style="background-color:#bbc5e2;" :style="{height: num+'px'}"></div>
-            </div>
-            <div class="li-foot">新年晚会</div>
-          </li>
-          <li>3</li>
-          <li>4</li>
-          <li>5</li>
         </ul>
       </div>
     </div>
@@ -50,22 +39,101 @@
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script>
     var app = new Vue({
-      el:'#app',
+      el: '#app',
       data: {
-        num: 20,
+        num: 220,
+        showData: [],
+        socket: null,
       },
       created() {
-
+        this.loadShowData()
       },
-      watch: {
-
+      mounted () {
+        var t = this
+        // var socket = io('http://qhxing.site')
+        // this.socket = socket
+        // socket.on('connect', function(){
+        //   console.log("socket connect success")
+        // })
+        // this.$nextTick(() => {
+        //   socket.on('message', function (obj) {
+        //     console.log(obj)
+        //     t.run(obj)
+        //   })
+        // })
+        setInterval(function(){
+          t.loadShowData()
+        },4000)
       },
       methods: {
-        test(){
-          this.num += 10
+        test() {
+          this.loadShowData()
+        },
+        loadShowData() {
+          var self = this
+          $.ajax({
+            url: 'http://106.14.198.193/programs',
+            method: 'GET',
+            timeout: 10000,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+              self.showData = data.data
+            },
+            error: function (xhr, textStatus) {
+            },
+          })
+        },
+        bgStyle(index) {
+          switch (index) {
+            case 0:
+              return { backgroundImage: 'url(../assets/num-green.png)' }
+              break
+            case 1:
+              return { backgroundImage: 'url(../assets/num-blue.png)' }
+              break
+            case 2:
+              return { backgroundImage: 'url(../assets/num-red.png)' }
+              break
+            case 3:
+              return { backgroundImage: 'url(../assets/num-yellow.png)' }
+              break
+            case 4:
+              return { backgroundImage: 'url(../assets/num-yellow-xs.png)' }
+              break
+            case 5:
+              return { backgroundImage: 'url(../assets/num-purple.png)' }
+              break
+            default:
+              return { backgroundImage: 'url(../assets/num-green.png)' }
+          }
+        },
+        progressColor(index){
+          switch (index) {
+            case 0:
+              return { backgroundColor: '#d3f750' }
+              break
+            case 1:
+              return { backgroundColor: '#8accfa' }
+              break
+            case 2:
+              return { backgroundColor: '#fb7ab7' }
+              break
+            case 3:
+              return { backgroundColor: '#ffe46a' }
+              break
+            case 4:
+              return { backgroundColor: '#f3eaad' }
+              break
+            case 5:
+              return { backgroundColor: '#8accfa' }
+              break
+            default:
+              return { backgroundColor: '#d3f750' }
+          }
         }
       }
     })
   </script>
 </body>
+
 </html>
