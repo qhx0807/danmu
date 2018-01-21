@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>详细信息</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+</head>
+
+<body>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+    .weui-article h1{
+      margin-bottom: .6em;
+    }
+  </style>
+  <div id="app" v-cloak>
+    <div id="loadingToast" v-if="loading">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">加载中</p>
+      </div>
+    </div>
+    <article class="weui-article">
+      <h1>{{showData.title}}</h1>
+      <section>
+        <section>
+          <h3 style="color:#495060">{{showData.player}} / {{showData.time}}</h3>
+          <p >{{showData.describle}}</p>
+          <p>
+            <img v-for="(item,index) in showData.pics" :key="index" :src="item" alt="">
+          </p>
+        </section>
+      </section>
+    </article>
+  </div>
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        showData: {},
+        loading: true,
+      },
+      created() {
+        this.loadShowData()
+      },
+      methods: {
+        loadShowData() {
+          var self = this
+          var id = this.getQueryString("id")
+          $.ajax({
+            url: 'http://106.14.198.193/programsDetails?id=' + id,
+            method: 'GET',
+            timeout: 10000,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+              console.log(data)
+              self.showData = data.data[0]
+              self.loading = false
+            },
+            error: function (xhr, textStatus) {
+              self.loading = false
+            },
+          })
+        },
+        getQueryString(name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+          var r = window.location.search.substr(1).match(reg);
+          if (r != null) return unescape(r[2]); return null;
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

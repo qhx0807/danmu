@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>节目信息</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+</head>
+
+<body>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+    .weui-media-box__desc{
+      -webkit-line-clamp: 2;
+    }
+    .weui-media-box__info{
+      margin-top: 7px;
+    }
+    .weui-media-box__info__meta{
+      float: right;
+    }
+    .weui-media-box{
+      padding-bottom: 7px;
+    }
+  </style>
+  <div id="app" v-cloak>
+    <div id="loadingToast" v-if="loading">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-loading weui-icon_toast"></i>
+          <p class="weui-toast__content">加载中</p>
+      </div>
+    </div>
+    <div class="weui-panel weui-panel_access">
+      <div class="weui-panel__bd">
+        <a href="javascript:void(0);" @click="onClickShow(item._id)" class="weui-media-box weui-media-box_appmsg" v-for="(item,index) in showData" :key="item._id">
+          <div class="weui-media-box__hd">
+            <img class="weui-media-box__thumb" :src="item.pics[0]"
+              alt="">
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">{{item.title}}</h4>
+            <p class="weui-media-box__desc">{{item.describle}}</p>
+            <ul class="weui-media-box__info">
+                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra">{{item.player}}</li>
+                <li class="weui-media-box__info__meta">{{item.time}}</li>
+            </ul>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        showData: [],
+        loading:true,
+      },
+      created() {
+        this.loadShowData()
+      },
+      methods: {
+        loadShowData() {
+          var self = this
+          $.ajax({
+            url: 'http://106.14.198.193/programs',
+            method: 'GET',
+            timeout: 10000,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+              // console.log(data)
+              self.showData = data.data
+              self.loading = false
+            },
+            error: function (xhr, textStatus) {
+              self.loading = false
+            },
+          })
+        },
+        onClickShow(id) {
+          window.location.href = "./wx-show-info.html?id="+id
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
