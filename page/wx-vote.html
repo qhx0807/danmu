@@ -119,7 +119,9 @@
           })
         },
         vote() {
-          console.log(this.checkedShows)
+          if(this.btnStatus){
+            return false
+          }
           var self = this
           var ids = this.checkedShows.toString()
           // var ids = this.checkedShows[0]

@@ -7,10 +7,18 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>vote</title>
   <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/danmu.css">
   <link rel="stylesheet" href="../css/vote.css">
 </head>
 
 <body>
+  <style>
+    .danmu-item{
+      animation-delay: 1s;
+      animation-duration: 30s;
+      display: inline-block;
+    }
+  </style>
   <div id="app" v-cloak>
     <div class="vote-wrap">
       <h2>你最喜欢以及最支持哪几个节目？</h2>
@@ -33,6 +41,12 @@
         </ul>
       </div>
     </div>
+    <div class="danmu-warp">
+      <div class="row row0" id="row0"></div>
+      <div class="row row1" id="row1"></div>
+      <div class="row row2" id="row2"></div>
+      <div class="row row3" id="row3"></div>
+    </div>
   </div>
   <script src="http://lib.baomitu.com/socket.io/1.7.4/socket.io.js"></script>
   <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -50,17 +64,17 @@
       },
       mounted () {
         var t = this
-        // var socket = io('http://qhxing.site')
-        // this.socket = socket
-        // socket.on('connect', function(){
-        //   console.log("socket connect success")
-        // })
-        // this.$nextTick(() => {
-        //   socket.on('message', function (obj) {
-        //     console.log(obj)
-        //     t.run(obj)
-        //   })
-        // })
+        var socket = io('http://qhxing.site')
+        this.socket = socket
+        socket.on('connect', function(){
+          console.log("socket connect success")
+        })
+        this.$nextTick(() => {
+          socket.on('message', function (obj) {
+            console.log(obj)
+            t.run(obj)
+          })
+        })
         setInterval(function(){
           t.loadShowData()
         },3000)
@@ -127,7 +141,66 @@
             default:
               return { backgroundColor: '#d3f750' }
           }
-        }
+        },
+        run (item) {
+          var result = this.getRowStatus()
+          if(!item.nickname){
+            return false
+          }
+          var length = item.content.length+item.nickname.length
+          var htmlStr = `<div class="danmu-item" style="animation-delay:${result.delay}s">
+                          <div class="box"><img src="${item.headimgurl}"></div>
+                          <div class="con">${item.nickname} : ${decodeURIComponent(item.content)} </div>
+                        </div>`
+          $("#"+result.row).append(htmlStr)
+          $('.danmu-item').on('animationend',function(){
+            $(this).remove()
+          })
+        },
+        getRowStatus(){
+          var rowArr = [
+            {name:'row0', num: 0, delay: 0, left: 0 },
+            {name:'row1', num: 0, delay: 0, left: 0 },
+            {name:'row2', num: 0, delay: 0, left: 0 },
+            {name:'row3', num: 0, delay: 0, left: 0 }
+          ]
+          var winW = $(window).width()
+          var speed = parseFloat(winW / 30)
+          for (let i = 0; i < rowArr.length; i++) {
+            let dom = $("#"+rowArr[i].name).find(".danmu-item:last")
+            if(dom.length>0){
+              rowArr[i].left = parseFloat(dom.position().left)
+              rowArr[i].delay = parseFloat(window.getComputedStyle(dom[0], null).animationDelay)
+              rowArr[i].num = $("#"+rowArr[i].name).find(".danmu-item").length
+            }else{
+              console.log(i)
+              return {row: 'row'+i, delay: 0}
+              break
+            }
+          }
+          rowArr.sort(function(a,b){
+            return a.num - b.num
+          })
+          var el = $("#"+rowArr[0].name).find(".danmu-item:last")[0]
+          var w = parseFloat(window.getComputedStyle(el, null).width)
+          var d = parseFloat(w / speed)
+          console.log(w)
+          console.log(rowArr[0])
+
+          var delay = 0
+          if(rowArr[0].left < winW && rowArr[0].left > winW-250){
+            delay = d
+          }else if(rowArr[0].left <= winW-250){
+            delay = 1
+          }else{
+            delay = rowArr[0].delay + d
+          }
+          return {
+            row: rowArr[0].name,
+            delay: delay
+          }
+
+        },
       }
     })
   </script>

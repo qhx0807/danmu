@@ -85,6 +85,9 @@
         },
         run (item) {
           var result = this.getRowStatus()
+          if(!item.nickname){
+            return false
+          }
           var length = item.content.length+item.nickname.length
           var htmlStr = `<div class="danmu-item" style="animation-delay:${result.delay}s">
                           <div class="box"><img src="${item.headimgurl}"></div>

@@ -43,7 +43,7 @@
 .danmu-item{
   display: none;
   padding: 10px 40px 10px 140px;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.4);
   box-shadow: 0 0 5px rgba(218,229,253,0.75);
   border-radius: 6px;
   zoom: 1;
