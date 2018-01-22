@@ -22,7 +22,7 @@
   <div id="app" v-cloak>
     <div class="vote-wrap">
       <h2>你最喜欢以及最支持哪几个节目？</h2>
-      <p class="tips">微信关注“测试公众号”，点击“投票”即可参与互动</p>
+      <p class="tips">微信关注“PCMI2007”，点击“投票”即可参与互动</p>
       <!-- <span class="total-num">共<strong>2037</strong>人参与</span> -->
       <div class="vote-box">
         <ul>
@@ -64,7 +64,7 @@
       },
       mounted () {
         var t = this
-        var socket = io('http://qhxing.site')
+        var socket = io('http://118.24.25.115')
         this.socket = socket
         socket.on('connect', function(){
           console.log("socket connect success")
